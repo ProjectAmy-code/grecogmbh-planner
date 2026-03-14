@@ -732,46 +732,220 @@ function App() {
                         {propertyModalTab === 'calc' && (
                           <div className="profi-calc-grid">
                             <div style={{ gridColumn: 'span 3' }}>
-                              {/* Objektdaten */}
+                              
+                              {/* Gruppe 1: Objektdaten */}
                               <div className="accordion-item">
                                 <button className="accordion-header" onClick={() => toggleSection('objektdaten')}>
-                                  <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}><Building2 size={18} /> Objektdaten</h4>
-                                  <ChevronDown size={18} style={{ transform: collapsedSections.objektdaten ? 'rotate(-90deg)' : 'none' }} />
+                                  <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                                    <Building2 size={18} /> Objektdaten
+                                  </h4>
+                                  <ChevronDown size={20} className={`chevron-icon ${!collapsedSections.objektdaten ? 'open' : ''}`} />
                                 </button>
                                 {!collapsedSections.objektdaten && (
                                   <div className="accordion-content">
-                                    <div className="input-row">
-                                      <div className="form-group">
-                                        <label>Bezeichnung / Adresse</label>
-                                        <div className="input-group-text"><input type="text" value={calcData.bezeichnung} onChange={(e) => handleCalcChange('bezeichnung', e.target.value)} /></div>
+                                    <div className="input-with-label" style={{ marginBottom: '1rem' }}>
+                                      <label>Bezeichnung</label>
+                                      <div className="input-group-text">
+                                        <input type="text" placeholder="z.B. Mehrfamilienhaus Berlin" value={calcData.bezeichnung} onChange={(e) => handleCalcChange('bezeichnung', e.target.value)} />
                                       </div>
                                     </div>
-                                    <div className="input-row">
-                                      <div className="form-group">
-                                        <label>Wohnfläche (m²)</label>
-                                        <div className="input-group-text"><input type="number" value={calcData.wohnflaeche} onChange={(e) => handleCalcChange('wohnflaeche', e.target.value)} /></div>
+                                    <div className="form-row">
+                                      <div className="input-with-label">
+                                        <label>Wohnfläche</label>
+                                        <div className="input-group-text">
+                                          <input type="number" value={calcData.wohnflaeche} onChange={(e) => handleCalcChange('wohnflaeche', e.target.value)} />
+                                          <span className="unit">qm</span>
+                                        </div>
                                       </div>
-                                      <div className="form-group">
+                                      <div className="input-with-label">
+                                        <label>Grundstück</label>
+                                        <div className="input-group-text">
+                                          <input type="number" value={calcData.grundstueck} onChange={(e) => handleCalcChange('grundstueck', e.target.value)} />
+                                          <span className="unit">qm</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="form-row">
+                                      <div className="input-with-label">
+                                        <label>Wohneinheiten</label>
+                                        <div className="input-group-text">
+                                          <input type="number" value={calcData.wohneinheiten} onChange={(e) => handleCalcChange('wohneinheiten', e.target.value)} />
+                                          <span className="unit">WE</span>
+                                        </div>
+                                      </div>
+                                      <div className="input-with-label">
+                                        <label>Gewerbeheiten</label>
+                                        <div className="input-group-text">
+                                          <input type="number" value={calcData.gewerbeheiten} onChange={(e) => handleCalcChange('gewerbeheiten', e.target.value)} />
+                                          <span className="unit">GE</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="form-row">
+                                      <div className="input-with-label">
                                         <label>Baujahr</label>
-                                        <div className="input-group-text"><input type="number" value={calcData.baujahr} onChange={(e) => handleCalcChange('baujahr', e.target.value)} /></div>
+                                        <div className="input-group-text">
+                                          <input type="number" value={calcData.baujahr} onChange={(e) => handleCalcChange('baujahr', e.target.value)} />
+                                          <span className="unit">Jahr</span>
+                                        </div>
+                                      </div>
+                                      <div className="input-with-label">
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                          <label>Bodenrichtwert</label>
+                                          <a href="https://geoportal.saarland.de/mapbender/frames/index.php?lang=de&gui_id=Geoportal-SL-2020&WMC=3019" target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.65rem', color: 'var(--primary)', fontWeight: '700', textDecoration: 'underline' }}>GEOPORTAL</a>
+                                        </div>
+                                        <div className="input-group-text">
+                                          <input type="number" value={calcData.bodenrichtwert} onChange={(e) => handleCalcChange('bodenrichtwert', e.target.value)} />
+                                          <span className="unit">€</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="form-row">
+                                      <div className="input-with-label">
+                                        <label>Kaufpreis</label>
+                                        <div className="input-group-text">
+                                          <input type="number" value={calcData.kaufpreis} onChange={(e) => handleCalcChange('kaufpreis', e.target.value)} required />
+                                          <span className="unit">€</span>
+                                        </div>
+                                      </div>
+                                      <div className="input-with-label">
+                                        <label>Kaltmiete / Jahr</label>
+                                        <div className="input-group-text">
+                                          <input type="number" value={calcData.kaltmiete} onChange={(e) => handleCalcChange('kaltmiete', e.target.value)} required />
+                                          <span className="unit">€</span>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 )}
                               </div>
 
-                              {/* Ertragsdaten */}
+                              {/* Gruppe 2: Kaufnebenkosten */}
+                              <div className="accordion-item">
+                                <button className="accordion-header" onClick={() => toggleSection('nebenkosten')}>
+                                  <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                                    <Plus size={18} /> Kaufnebenkosten
+                                  </h4>
+                                  <ChevronDown size={20} className={`chevron-icon ${!collapsedSections.nebenkosten ? 'open' : ''}`} />
+                                </button>
+                                {!collapsedSections.nebenkosten && (
+                                  <div className="accordion-content">
+                                    <div className="form-row">
+                                      <div className="input-with-label">
+                                        <label>Grunderwerbsteuer</label>
+                                        <div className="input-group-text">
+                                          <input type="number" step="0.01" value={calcData.grunderwerbsteuer} onChange={(e) => handlePercentChange('grunderwerbsteuer', e.target.value)} />
+                                          <span className="unit">%</span>
+                                        </div>
+                                      </div>
+                                      <div className="input-with-label">
+                                        <label>Maklerprovision</label>
+                                        <div className="input-group-text">
+                                          <input type="number" step="0.01" value={calcData.makler} onChange={(e) => handlePercentChange('makler', e.target.value)} />
+                                          <span className="unit">%</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="form-row">
+                                      <div className="input-with-label">
+                                        <label>Notarkosten</label>
+                                        <div className="input-group-text">
+                                          <input type="number" step="0.01" value={calcData.notar} onChange={(e) => handlePercentChange('notar', e.target.value)} />
+                                          <span className="unit">%</span>
+                                        </div>
+                                      </div>
+                                      <div className="input-with-label">
+                                        <label>Grundbuchamt</label>
+                                        <div className="input-group-text">
+                                          <input type="number" step="0.01" value={calcData.grundbuchamt} onChange={(e) => handlePercentChange('grundbuchamt', e.target.value)} />
+                                          <span className="unit">%</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="input-with-label" style={{ marginTop: '1rem' }}>
+                                      <label>Sonstige Nebenkosten</label>
+                                      <div className="input-group-text">
+                                        <input type="number" value={calcData.sonstigeNK} onChange={(e) => handleCalcChange('sonstigeNK', e.target.value)} />
+                                        <span className="unit">€</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Gruppe 3: Finanzierung & Bewirtschaftung */}
                               <div className="accordion-item">
                                 <button className="accordion-header" onClick={() => toggleSection('finanzierung')}>
-                                  <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}><Euro size={18} /> Ertragsdaten</h4>
-                                  <ChevronDown size={18} style={{ transform: collapsedSections.finanzierung ? 'rotate(-90deg)' : 'none' }} />
+                                  <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                                    <Euro size={18} /> Finanzierung & Bewirtsch.
+                                  </h4>
+                                  <ChevronDown size={20} className={`chevron-icon ${!collapsedSections.finanzierung ? 'open' : ''}`} />
                                 </button>
                                 {!collapsedSections.finanzierung && (
                                   <div className="accordion-content">
-                                    <div className="input-row">
-                                      <div className="form-group">
-                                        <label>Kaltmiete / Monat</label>
-                                        <div className="input-group-text"><input type="number" value={calcData.kaltmiete} onChange={(e) => handleCalcChange('kaltmiete', e.target.value)} /><span className="unit">€</span></div>
+                                    <div className="form-row">
+                                      <div className="input-with-label">
+                                        <label>Zinssatz / Jahr</label>
+                                        <div className="input-group-text">
+                                          <input type="number" step="0.01" value={calcData.zins} onChange={(e) => handlePercentChange('zins', e.target.value)} />
+                                          <span className="unit">%</span>
+                                        </div>
+                                      </div>
+                                      <div className="input-with-label">
+                                        <label>Tilgungssatz</label>
+                                        <div className="input-group-text">
+                                          <input type="number" step="0.01" value={calcData.tilgung} onChange={(e) => handlePercentChange('tilgung', e.target.value)} />
+                                          <span className="unit">%</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="form-row">
+                                      <div className="input-with-label">
+                                        <label>Rücklage Mietausfall</label>
+                                        <div className="input-group-text">
+                                          <input type="number" step="0.01" value={calcData.mietausfall} onChange={(e) => handlePercentChange('mietausfall', e.target.value)} />
+                                          <span className="unit">%</span>
+                                        </div>
+                                      </div>
+                                      <div className="input-with-label">
+                                        <label>Instandh. / qm</label>
+                                        <div className="input-group-text">
+                                          <input type="number" step="0.01" value={calcData.instandhaltungQm} onChange={(e) => handleCalcChange('instandhaltungQm', e.target.value)} />
+                                          <span className="unit">€</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="input-with-label" style={{ marginTop: '0.75rem' }}>
+                                      <label>Renovierungskosten</label>
+                                      <div className="input-group-text">
+                                        <input type="number" value={calcData.renovierung} onChange={(e) => handleCalcChange('renovierung', e.target.value)} />
+                                        <span className="unit">€</span>
+                                      </div>
+                                    </div>
+                                    <div className="input-with-label" style={{ marginTop: '0.5rem' }}>
+                                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <label>Darlehenshöhe</label>
+                                        <span style={{ fontSize: '0.65rem', color: 'var(--primary)', fontWeight: '700' }}>100% = OHNE NEBENKOSTEN</span>
+                                      </div>
+                                      <div className="input-group-text">
+                                        <input type="number" value={calcData.darlehenProzent} onChange={(e) => handlePercentChange('darlehenProzent', e.target.value)} />
+                                        <span className="unit">%</span>
+                                      </div>
+                                    </div>
+                                    <div className="form-row" style={{ marginTop: '0.5rem' }}>
+                                      <div className="input-with-label">
+                                        <label>Abschreibung</label>
+                                        <div className="input-group-text">
+                                          <input type="number" step="0.1" value={calcData.abschreibung} onChange={(e) => handleCalcChange('abschreibung', e.target.value)} />
+                                          <span className="unit">%</span>
+                                        </div>
+                                      </div>
+                                      <div className="input-with-label">
+                                        <label>Hausgeld (n. uml.) / Jahr</label>
+                                        <div className="input-group-text">
+                                          <input type="number" value={calcData.hausgeld} onChange={(e) => handleCalcChange('hausgeld', e.target.value)} />
+                                          <span className="unit">€/J</span>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -779,23 +953,99 @@ function App() {
                               </div>
                             </div>
 
-                            <div className="calc-preview">
-                               <div className="preview-card" style={{ background: 'var(--primary)', color: 'white' }}>
-                                  <h3 style={{ borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Bestands-Check</h3>
-                                  <div className="preview-list">
-                                    <div className="preview-item">
-                                      <span>Cashflow (Netto):</span>
-                                      <span style={{ fontWeight: 800 }}>{Math.round(results.cashflowNachSteuerJahr / 12).toLocaleString('de-DE')} €/Mt</span>
-                                    </div>
-                                    <div className="preview-item">
-                                      <span>Rendite:</span>
-                                      <span style={{ fontWeight: 800 }}>{results.bruttorendite.toFixed(2)} %</span>
-                                    </div>
-                                  </div>
-                                  <button onClick={handleUpdatePortfolioData} className="btn button-white" style={{ marginTop: '2rem', width: '100%' }}>
-                                    Änderungen speichern
+                            {/* Spalte 2 (KPIs) */}
+                            <div style={{ minWidth: '300px' }}>
+                              <h4 style={{ fontSize: '0.8rem', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', marginBottom: '1rem' }}>Berechnung Cashflow Netto</h4>
+                              
+                              <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Kauf als...</label>
+                                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                  <button 
+                                    onClick={() => handleCalcChange('kaufAls', 'Privat')}
+                                    style={{ 
+                                      flex: 1, 
+                                      padding: '0.6rem', 
+                                      borderRadius: '10px', 
+                                      border: '2px solid',
+                                      borderColor: calcData.kaufAls === 'Privat' ? 'var(--primary)' : '#e2e8f0',
+                                      background: calcData.kaufAls === 'Privat' ? 'var(--primary)' : 'white',
+                                      color: calcData.kaufAls === 'Privat' ? 'white' : 'var(--text-secondary)',
+                                      fontWeight: '700',
+                                      cursor: 'pointer',
+                                      transition: 'all 0.2s'
+                                    }}
+                                  >
+                                    Privat
                                   </button>
-                               </div>
+                                  <button 
+                                    onClick={() => handleCalcChange('kaufAls', 'GmbH')}
+                                    style={{ 
+                                      flex: 1, 
+                                      padding: '0.6rem', 
+                                      borderRadius: '10px', 
+                                      border: '2px solid',
+                                      borderColor: calcData.kaufAls === 'GmbH' ? 'var(--primary)' : '#e2e8f0',
+                                      background: calcData.kaufAls === 'GmbH' ? 'var(--primary)' : 'white',
+                                      color: calcData.kaufAls === 'GmbH' ? 'white' : 'var(--text-secondary)',
+                                      fontWeight: '700',
+                                      cursor: 'pointer',
+                                      transition: 'all 0.2s'
+                                    }}
+                                  >
+                                    GmbH
+                                  </button>
+                                </div>
+                              </div>
+
+                              <div className="results-preview-box" style={{ marginTop: '0' }}>
+                                  <div className="preview-item highlight">
+                                   <span>Cashflow Netto:</span>
+                                   <div style={{ textAlign: 'right' }}>
+                                     <div style={{ fontSize: '1.2rem', fontWeight: '900', color: results.cashflowNachSteuerJahr >= 0 ? '#4ade80' : '#f87171' }}>
+                                       {Math.round(results.cashflowNachSteuerJahr / 12).toLocaleString('de-DE')} € <small style={{ fontSize: '0.7rem', opacity: 0.8 }}>/ Mt</small>
+                                     </div>
+                                     <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>
+                                       {Math.round(results.cashflowNachSteuerJahr).toLocaleString('de-DE')} € <small style={{ opacity: 0.8 }}>/ Jahr</small>
+                                     </div>
+                                   </div>
+                                 </div>
+                                 <div className="preview-item">
+                                   <span>Eigenkapital nötig:</span>
+                                   <span>{Math.round(results.eigenkapital).toLocaleString('de-DE')} €</span>
+                                 </div>
+                                 <div className="preview-item">
+                                   <span>Darlehenssumme:</span>
+                                   <span>{Math.round(results.darlehenssumme).toLocaleString('de-DE')} €</span>
+                                 </div>
+                                 <div className="preview-item">
+                                   <span>Steuermessbetrag:</span>
+                                   <span>{Math.round(results.steuerMessbetrag).toLocaleString('de-DE')} €</span>
+                                 </div>
+                                 <div className="preview-item">
+                                   <span>Steuern:</span>
+                                   <span>{Math.round(results.steuern).toLocaleString('de-DE')} €</span>
+                                 </div>
+                                 <div className="preview-item">
+                                   <span>Gebäudeanteil:</span>
+                                   <span>{Math.round(results.gebaeudeanteil).toLocaleString('de-DE')} €</span>
+                                 </div>
+                                 <div className="preview-item">
+                                   <span>Abschreibung / Jahr:</span>
+                                   <span style={{ color: '#94a3b8' }}>{Math.round(results.abschreibungJahr).toLocaleString('de-DE')} €</span>
+                                 </div>
+                                 <div className="preview-item">
+                                   <span>Bruttorendite:</span>
+                                   <span>{results.bruttorendite.toFixed(2)} %</span>
+                                 </div>
+                                 <div className="preview-item">
+                                   <span>Netto Rendite:</span>
+                                   <span style={{ color: '#4ade80' }}>{results.nettoRendite.toFixed(2)} %</span>
+                                 </div>
+
+                                 <button onClick={handleUpdatePortfolioData} className="btn btn-primary" style={{ marginTop: '2rem', width: '100%', padding: '1rem' }}>
+                                   Änderungen speichern
+                                 </button>
+                              </div>
                             </div>
                           </div>
                         )}
@@ -1135,7 +1385,7 @@ function App() {
                                         Privat
                                       </button>
                                       <button 
-                                        onClick={() => setCalcData({...calcData, kaufAls: 'GmbH'})}
+                                        onClick={() => handleCalcChange('kaufAls', 'GmbH')}
                                         style={{ 
                                           flex: 1, 
                                           padding: '0.6rem', 
