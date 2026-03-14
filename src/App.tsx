@@ -595,65 +595,142 @@ function App() {
                   <p>Verwalte deine bereits erworbenen Immobilien.</p>
                 </div>
 
-                <div className="content-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+                <div className="portfolio-sections">
                   {portfolio.length === 0 ? (
                     <div className="card large-placeholder" style={{ gridColumn: '1 / -1' }}>
                       <Building2 size={48} className="placeholder-icon" />
                       <p>Du hast noch keine Immobilien im Bestand. Kalkuliere ein Objekt in der Akquise und übernehme es.</p>
                     </div>
                   ) : (
-                    portfolio.map(item => (
-                      <div 
-                        key={item.id} 
-                        className="card pipeline-card" 
-                        onClick={() => handleOpenPropertyDetail(item)}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <div className="card-header" style={{ marginBottom: '1.25rem' }}>
-                          <div style={{ background: 'rgba(2, 132, 199, 0.1)', padding: '0.6rem', borderRadius: '12px' }}>
-                            <Building2 className="icon-primary" size={24} />
-                          </div>
-                          <div>
-                            <h3 style={{ margin: 0, fontSize: '1.1rem' }}>{item.address}</h3>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: '600' }}>
-                              {item.details?.baujahr ? `Baujahr ${item.details.baujahr}` : 'Bestandsimmobilie'}
-                            </span>
-                          </div>
-                        </div>
+                    <>
+                      {/* PRIVATIMMOBILIEN */}
+                      {portfolio.some(p => p.details?.kaufAls === 'Privat') && (
+                        <div style={{ marginBottom: '3rem' }}>
+                          <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)' }}>
+                            <div style={{ width: '4px', height: '24px', background: 'var(--primary)', borderRadius: '2px' }}></div>
+                            Privatimmobilien
+                          </h2>
+                          <div className="content-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+                            {portfolio.filter(p => p.details?.kaufAls === 'Privat').map(item => (
+                              <div 
+                                key={item.id} 
+                                className="card pipeline-card" 
+                                onClick={() => handleOpenPropertyDetail(item)}
+                                style={{ cursor: 'pointer' }}
+                              >
+                                <div className="card-header" style={{ marginBottom: '1.25rem' }}>
+                                  <div style={{ background: 'rgba(2, 132, 199, 0.1)', padding: '0.6rem', borderRadius: '12px' }}>
+                                    <Building2 className="icon-primary" size={24} />
+                                  </div>
+                                  <div>
+                                    <h3 style={{ margin: 0, fontSize: '1.1rem' }}>{item.address}</h3>
+                                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: '600' }}>
+                                      {item.details?.baujahr ? `Baujahr ${item.details.baujahr}` : 'Bestandsimmobilie'}
+                                    </span>
+                                  </div>
+                                </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                          <div className="kpi-tag">
-                            <span className="label">CASHFLOW</span>
-                            <span className="val" style={{ color: item.results?.cashflowNachSteuerJahr >= 0 ? 'var(--success)' : 'var(--error)' }}>
-                              {Math.round((item.results?.cashflowNachSteuerJahr || 0) / 12).toLocaleString('de-DE')} €/Mt
-                            </span>
-                          </div>
-                          <div className="kpi-tag">
-                            <span className="label">MIETE IST</span>
-                            <span className="val">
-                              {Math.round(parseFloat(item.details?.kaltmiete) || 0).toLocaleString('de-DE')} €/Mt
-                            </span>
-                          </div>
-                          <div className="kpi-tag">
-                            <span className="label">RENDITE</span>
-                            <span className="val">
-                              {(item.results?.bruttorendite || 0).toFixed(2)} %
-                            </span>
-                          </div>
-                          <div className="kpi-tag">
-                            <span className="label">AUFGABEN</span>
-                            <span className="val" style={{ color: (item.tasks || []).filter((t: any) => !t.completed).length > 0 ? 'var(--primary)' : 'var(--text-secondary)' }}>
-                              {(item.tasks || []).filter((t: any) => !t.completed).length} offen
-                            </span>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                  <div className="kpi-tag">
+                                    <span className="label">CASHFLOW</span>
+                                    <span className="val" style={{ color: item.results?.cashflowNachSteuerJahr >= 0 ? 'var(--success)' : 'var(--error)' }}>
+                                      {Math.round((item.results?.cashflowNachSteuerJahr || 0) / 12).toLocaleString('de-DE')} €/Mt
+                                    </span>
+                                  </div>
+                                  <div className="kpi-tag">
+                                    <span className="label">MIETE IST</span>
+                                    <span className="val">
+                                      {Math.round(parseFloat(item.details?.kaltmiete) || 0).toLocaleString('de-DE')} €/Mt
+                                    </span>
+                                  </div>
+                                  <div className="kpi-tag">
+                                    <span className="label">RENDITE</span>
+                                    <span className="val">
+                                      {(item.results?.bruttorendite || 0).toFixed(2)} %
+                                    </span>
+                                  </div>
+                                  <div className="kpi-tag">
+                                    <span className="label">AUFGABEN</span>
+                                    <span className="val" style={{ color: (item.tasks || []).filter((t: any) => !t.completed).length > 0 ? 'var(--primary)' : 'var(--text-secondary)' }}>
+                                      {(item.tasks || []).filter((t: any) => !t.completed).length} offen
+                                    </span>
+                                  </div>
+                                </div>
+                          
+                                <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Besitzer: Privat</span>
+                                  <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: '800' }}>VERWALTEN →</span>
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </div>
-                   
-                        <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Besitzer: {item.details?.kaufAls || 'GmbH'}</span>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: '800' }}>VERWALTEN →</span>
+                      )}
+
+                      {/* GMBH IMMOBILIEN */}
+                      {(portfolio.some(p => p.details?.kaufAls === 'GmbH' || !p.details?.kaufAls)) && (
+                        <div style={{ marginBottom: '3rem' }}>
+                          <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)' }}>
+                            <div style={{ width: '4px', height: '24px', background: 'var(--primary)', borderRadius: '2px' }}></div>
+                            GmbH-Bestand
+                          </h2>
+                          <div className="content-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+                            {portfolio.filter(p => p.details?.kaufAls === 'GmbH' || !p.details?.kaufAls).map(item => (
+                              <div 
+                                key={item.id} 
+                                className="card pipeline-card" 
+                                onClick={() => handleOpenPropertyDetail(item)}
+                                style={{ cursor: 'pointer' }}
+                              >
+                                <div className="card-header" style={{ marginBottom: '1.25rem' }}>
+                                  <div style={{ background: 'rgba(2, 132, 199, 0.1)', padding: '0.6rem', borderRadius: '12px' }}>
+                                    <Building2 className="icon-primary" size={24} />
+                                  </div>
+                                  <div>
+                                    <h3 style={{ margin: 0, fontSize: '1.1rem' }}>{item.address}</h3>
+                                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: '600' }}>
+                                      {item.details?.baujahr ? `Baujahr ${item.details.baujahr}` : 'Bestandsimmobilie'}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                  <div className="kpi-tag">
+                                    <span className="label">CASHFLOW</span>
+                                    <span className="val" style={{ color: item.results?.cashflowNachSteuerJahr >= 0 ? 'var(--success)' : 'var(--error)' }}>
+                                      {Math.round((item.results?.cashflowNachSteuerJahr || 0) / 12).toLocaleString('de-DE')} €/Mt
+                                    </span>
+                                  </div>
+                                  <div className="kpi-tag">
+                                    <span className="label">MIETE IST</span>
+                                    <span className="val">
+                                      {Math.round(parseFloat(item.details?.kaltmiete) || 0).toLocaleString('de-DE')} €/Mt
+                                    </span>
+                                  </div>
+                                  <div className="kpi-tag">
+                                    <span className="label">RENDITE</span>
+                                    <span className="val">
+                                      {(item.results?.bruttorendite || 0).toFixed(2)} %
+                                    </span>
+                                  </div>
+                                  <div className="kpi-tag">
+                                    <span className="label">AUFGABEN</span>
+                                    <span className="val" style={{ color: (item.tasks || []).filter((t: any) => !t.completed).length > 0 ? 'var(--primary)' : 'var(--text-secondary)' }}>
+                                      {(item.tasks || []).filter((t: any) => !t.completed).length} offen
+                                    </span>
+                                  </div>
+                                </div>
+                          
+                                <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Besitzer: GmbH</span>
+                                  <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: '800' }}>VERWALTEN →</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    ))
+                      )}
+                    </>
                   )}
                 </div>
 
